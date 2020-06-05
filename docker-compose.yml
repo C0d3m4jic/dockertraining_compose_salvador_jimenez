@@ -1,0 +1,28 @@
+version: '3.4'
+services:
+  mydb:
+    image: mysql
+    container_name: "database_container"
+    environment:
+      MYSQL_DATABASE: "FoodDB"
+      MYSQL_USER: "test"
+      MYSQL_PASSWORD: "123456"
+      MYSQL_ROOT_PASSWORD: "778899"
+    ports:
+      - "3018:3306"
+    volumes:
+     - session7_1:/var/lib/mysql
+  dockertraining_compose_salvador_jimenez:
+    image: ${DOCKER_REGISTRY-}dockertraining_compose_salvador_jimenez
+    container_name: "api_container"
+    build:
+      context: .
+      dockerfile: dockertraining_compose_salvador_jimenez\Dockerfile
+    ports:
+      - "8091:80"
+    environment:
+        "ConnectionStrings:FoodDB" : "Server=database_container;Port=3306;Database=fooddb;Uid=test;Pwd=123456"
+    depends_on:
+      - mydb
+volumes:
+  session7_1:
